@@ -2,10 +2,9 @@ name: TicketFlow CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch: # <-- C'EST L'AJOUT CLÉ
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   test:
