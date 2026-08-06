@@ -33,7 +33,7 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/dashboard?type=technicians",
+              "raw": "{{baseUrl}}/dashboard?type=tickets",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -43,11 +43,12 @@
               "query": [
                 {
                   "key": "type",
-                  "value": "technicians"
+                  "value": "tickets",
+                  "description": "'ticket' (default) OR 'technicians'"
                 }
               ]
             },
-            "description": "Retrieves aggregated statistics from the dashboard, scoped to a specific entity type. Use this endpoint to fetch summary metrics filtered by the provided `type` parameter (e.g., technicians).\n\n## Query Parameters\n\n| Parameter | Type   | Required | Description                                                                 | Example        |\n|-----------|--------|----------|-----------------------------------------------------------------------------|----------------|\n| `type`    | string | Yes      | Filters the dashboard statistics by entity type. Determines which category of aggregated data is returned. | `technicians` |\n\n## Authentication\n\nThis endpoint requires a **Bearer token**. Include the token in the `Authorization` header using the `{{token}}` variable:\n\n```\nAuthorization: Bearer {{token}}\n```\n\nEnsure `{{token}}` is set in your active environment or collection variables before sending the request.\n\n## Notes\n\n- `{{baseUrl}}` must be defined in the active environment. It represents the base URL of the API (e.g., `https://api.example.com`).\n- The full request URL resolves to: `{{baseUrl}}/dashboard?type=technicians`\n- This request is part of the **Dashboard** folder within the **TicketFlow** collection."
+            "description": "## Get Statistics\n\nRetrieves aggregated statistics from the dashboard, scoped to a specific entity type. Use this endpoint to fetch summary metrics filtered by the provided `type` parameter (e.g., technicians).\n\n---\n\n## Request Details\n\n| Property | Value |\n| --- | --- |\n| Method | `GET` |\n| URL | `{{baseUrl}}/dashboard` |\n\n---\n\n## Query Parameters\n\n| Parameter | Type | Required | Description | Example |\n| --- | --- | --- | --- | --- |\n| `type` | string | Yes | Filters the dashboard statistics by entity type. Determines which category of aggregated data is returned. | `technicians` |\n\n---\n\n## Notes\n\n- `{{baseUrl}}` must be defined in your active environment.\n    \n- The query parameter is optional."
           },
           "response": []
         }
@@ -78,7 +79,7 @@
                 },
                 {
                   "key": "limit",
-                  "value": "5",
+                  "value": "10",
                   "disabled": true
                 },
                 {
@@ -103,7 +104,7 @@
                 }
               ]
             },
-            "description": "## Get Many Tickets\n\nRetrieves a paginated list of tickets. Supports filtering by status, keyword search, and sorting by various fields. All query parameters are optional — omitting them will return results using the server's default values.\n\n---\n\n## Query Parameters\n\n| Parameter | Type | Description | Required | Example Value |\n| --- | --- | --- | --- | --- |\n| `page` | number | The page number to retrieve (for pagination). | Optional | `1` |\n| `limit` | number | Number of ticket results to return per page. | Optional | `5` |\n| `status` | string | Filter tickets by their status. | Optional | `open` |\n| `search` | string | Keyword to search and filter tickets by. | Optional | `imp` |\n| `sortBy` | string | Field name to sort the results by. | Optional | `priority` |\n| `orderBy` | string | Sort direction — `asc` for ascending, `desc` for descending. | Optional | `desc` |\n\n---\n\n## Notes\n\n- All query parameters are **optional**. If omitted, the API will use its default pagination and ordering.\n    \n- The `page` and `limit` parameters work together to paginate results (e.g., `page=1&limit=5` returns the first 5 tickets).\n    \n- The `search` parameter performs a keyword match against ticket fields (e.g., `search=imp` matches tickets containing \"imp\").\n    \n- Valid values for `orderBy` are `asc` (ascending) and `desc` (descending)."
+            "description": "## Get Many Tickets\n\nRetrieves a paginated, filterable, and sortable list of tickets.\n\n---\n\n## Request Details\n\n| Property | Value |\n| --- | --- |\n| Method | `GET` |\n| URL | `{{baseUrl}}/tickets` |\n\n---\n\n## Query Parameters\n\n| Parameter | Type | Required | Description | Example |\n| --- | --- | --- | --- | --- |\n| `page` | number | No | Page number to retrieve. | `1` |\n| `limit` | number | No | Number of tickets per page. | `10` |\n| `status` | string | No | Filter tickets by status. | `open` |\n| `search` | string | No | Full-text search query. | `imp` |\n| `sortBy` | string | No | Field to sort results by. | `priority` |\n| `orderBy` | string | No | Sort direction: `asc` or `desc`. | `desc` |\n\n---\n\n## Notes\n\n- `{{baseUrl}}` must be defined in your active environment.\n    \n- All query parameters are optional."
           },
           "response": []
         },
@@ -128,7 +129,7 @@
                 }
               ]
             },
-            "description": "## Get One Ticket\n\nRetrieves the details of a single ticket by its unique identifier.\n\n---\n\n## Request Details\n\n| Property | Value |\n|----------|-------|\n| Method   | `GET` |\n| URL      | `{{baseUrl}}/tickets/:id` |\n\n---\n\n## Path Parameters\n\n| Parameter | Type   | Required | Description                        | Example                    |\n|-----------|--------|----------|------------------------------------|----------------------------|\n| `id`      | string | Yes      | The unique ID of the ticket to retrieve. | `6a727f8b613a3e858239fa27` |\n\n---\n\n## Notes\n\n- `{{baseUrl}}` must be defined in your active environment.\n- Returns a `404` if no ticket with the given `id` exists."
+            "description": "## Get One Ticket\n\nRetrieves the details of a single ticket by its unique identifier.\n\n---\n\n## Request Details\n\n| Property | Value |\n| --- | --- |\n| Method | `GET` |\n| URL | `{{baseUrl}}/tickets/:id` |\n\n---\n\n## Path Parameters\n\n| Parameter | Type | Required | Description | Example |\n| --- | --- | --- | --- | --- |\n| `id` | string | Yes | The unique ID of the ticket to retrieve. | `6a727f8b613a3e858239fa27` |\n\n---\n\n## Notes\n\n- `{{baseUrl}}` must be defined in your active environment.\n    \n- Returns a `404` if no ticket with the given `id` exists."
           },
           "response": []
         },
@@ -383,7 +384,8 @@
               "path": [
                 "technicians"
               ]
-            }
+            },
+            "description": "## Get Many Technicians\n\nRetrieves a list of all technicians registered in the system.\n\n---\n\n## Request Details\n\n| Property | Value |\n| --- | --- |\n| Method | `GET` |\n| URL | `{{baseUrl}}/technicians` |\n\n---\n\n## Notes\n\n- `{{baseUrl}}` must be defined in your active environment.\n- Use this endpoint to browse the full roster of technicians, for example when assigning one to a ticket."
           },
           "response": []
         },
