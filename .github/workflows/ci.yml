@@ -1,0 +1,47 @@
+name: TicketFlow CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js (v22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Exécution de la suite Jest
+        run: npm run test
+
+  docker-build:
+    name: Test Docker Build
+    runs-on: ubuntu-latest
+    needs: test # Ce job ne démarre que si les tests passent
+    
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build de l'image (Dry Run)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false # Ne publie pas l'image, valide juste le build
+          tags: ticketflow-api:test
