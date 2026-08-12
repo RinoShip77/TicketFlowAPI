@@ -36,7 +36,7 @@ export const login = asyncHandler(async (req, res) => {
   const token = jwt.sign(
     { id: technician._id, email: technician.email },
     env.JWT_SECRET,
-    { expiresIn: '1d' }
+    { expiresIn: '8h' }
   );
 
   // 5. On retire le mot de passe de l'objet avant de l'envoyer au client
